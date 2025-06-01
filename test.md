@@ -1,730 +1,839 @@
-# Unit 01 - UNIX Operating System
+# Unit 01
 
-## Why UNIX Became So Popular
+## Why UNIX became so popular
 
-UNIX gained widespread adoption due to several key characteristics:
+* Portable: written in a high-level language (C), making it easy to read, understand, change, and move to other machines.
+* User-Friendly: A powerful, simple interface.
+* Modular: Provides primitives for complex programs.
+* Organised: It uses a hierarchical file system.
+* Consistent: Uses the byte stream file format.
+* Device-Agnostic: Uniform device interface.
+* Multi-User/Process: Concurrent execution.
+* Hardware Abstraction: Portability across systems.
 
-- **Portable**: Written in a high-level language (C), making it easy to read, understand, change, and move to other machines
-- **User-Friendly**: Provides a powerful yet simple interface
-- **Modular**: Offers primitives for building complex programs
-- **Organized**: Uses a hierarchical file system structure
-- **Consistent**: Employs the byte stream file format throughout
-- **Device-Agnostic**: Uniform device interface for all peripherals
-- **Multi-User/Process**: Supports concurrent execution of multiple processes
-- **Hardware Abstraction**: Ensures portability across different systems
 
 ## High-level Architecture of UNIX Systems
 
-The UNIX system is organized in a layered architecture:
+**Architecture of UNIX Systems**
+![Architecture of UNIX Systems](Diagrams/Screen_Shot_2017-06-05_at_4.39.07_PM.png)
 
-### Layer 1: Hardware
-Contains all hardware-related information and physical components.
-
-### Layer 2: Kernel
-- Core of the Operating System
-- Software interface between hardware and software
-- Handles critical tasks:
-  - Memory management
-  - File management
-  - Network management
-  - Process management
-
-### Layer 3: Shell Commands
-- Interface between user and kernel
-- Shell utility processes user requests
-- Interprets commands and calls appropriate programs
-- Common commands: `cp`, `mv`, `cat`, `grep`, `id`, `wc`, `nroff`, `a.out`
-
-### Layer 4: Application Layer
-- Outermost layer
-- Executes external applications
-
-### System Interaction
-- Operating system interacts directly with hardware
-- Provides common services to programs
-- Insulates programs from hardware idiosyncrasies
-- Programs interact with kernel through well-defined **system calls**
+* Layer-1: Hardware: It consists of all hardware related information.
+* Layer-2: Kernel: This is the core of the Operating System. It is a software that acts as the interface between the hardware and the software. Most of the tasks like memory management, file management, network management, process management, etc., are done by the kernel.
+* Layer-3: Shell commands: This is the interface between the user and the kernel. Shell is the utility that processes your requests. When you type in a command at the terminal, the shell interprets the command and calls the program that you want. There are various commands like cp, mv, cat, grep, id, wc, nroff, a.out and more.
+* Layer-4: Application Layer: It is the outermost layer that executes the given external applications.
+  
+* The operating systems interacts directly with the hardware, providing common services to programs and insulating them from hardware idiosyncrasies.
+Programs such as the shell and editors shown in the outer layers interact with the kernel by invoking a well defined set of *system calls*.
 
 ## User Perspective
 
 ### Shell
-The OS provides a command-line interface (shell) to interact with files, processes, and system services.
 
+* The OS provides a command-line interface or shell to interact with files, processes, and system services
+  
 ### The File System
 
-#### Structure
-- **Hierarchical Structure**: Tree-like organization with root ('/')
-- **Consistent Data**: Uniform treatment of file content
-- **File Management**: Easy creation and deletion of files
-- **Dynamic Growth**: Files can expand as needed
-- **Data Protection**: Security mechanisms for file access
-- **Devices as Files**: Unified interface for peripherals
+* Hierarchical Structure: Tree-like organisation with a root ('/').
+* Consistent Data: Uniform treatment of file content.
+* File Management: Create and delete files easily.
+* Dynamic Growth: Files can expand as needed.
+* Data Protection: Security mechanisms for file access.
+* Devices as Files: Unified interface for peripherals.
+* Nodes:
+  - Root: top-level directory.
+  - Directories: Organise files (non-leaf nodes).
+  - Files: Data storage (leaf nodes: directories, regular files, special device files).
+ 
+### Process
 
-#### Node Types
-- **Root**: Top-level directory
-- **Directories**: Organize files (non-leaf nodes)
-- **Files**: Data storage (leaf nodes: directories, regular files, special device files)
-
-### Process Management
-Users can run commands, scripts, and applications, managing system resources indirectly via system calls or shell commands.
+* Users can run commands, scripts, and applications, and manage system resources indirectly via system calls or shell commands.
+  
 
 ## Operating System Services
 
-- **Process Control**: Creation, termination, suspension, and inter-process communication
-- **CPU Scheduling**: Fair CPU time sharing using time-sharing and context switching
-- **Main Memory Management**: Memory allocation, address space protection, and memory sharing
-- **Swapping/Paging**: Memory management by moving processes/pages to swap space when memory is low
-- **File System Management**: Secondary storage allocation/reclamation, file system structuring, and data protection
-- **Device Access**: Controlled access to I/O devices (disks, terminals, network interfaces)
-- **Transparency**: Hides internal file formats and device distinctions, returning simple byte streams
-- **Shell Support**: Services for input reading, process spawning, piping, and I/O redirection
-- **Customizability**: Supports user-built environments using kernel services
+* Process Control: Allows creation, termination, suspension, and communication between processes.
+* CPU Scheduling: Shares CPU time fairly among processes using time-sharing and context switching.
+* Main Memory Management: Allocates memory to processes, protects address spaces, and supports memory sharing.
+* Swapping/Paging: Frees memory by moving processes or pages to swap space when memory is low.
+* File System Management: Allocates and reclaims secondary storage, structures the file system, and protects user data.
+* Device Access: Enables controlled access to I/O devices like disks, terminals, and network interfaces.
+* Transparency: Hides internal file formats and device distinctions, returning simple byte streams to processes.
+* Shell Support: Provides services like input reading, process spawning, piping, and I/O redirection to enable shell functionality.
+* Customizability: Supports user-built environments (e.g., custom shells) using the same kernel services.
 
-## Hardware Assumptions
+## Assumptions about Hardware
 
-### Execution Modes
-- **User Mode**: Limited access to user data and instructions
-- **Kernel Mode**: Full access to system memory and devices
-- **System Calls**: Switch execution from user to kernel mode
+* **Execution Modes**
 
-### Privileged Instructions
-- Executable only in kernel mode
-- Prevent unauthorized access to system-level operations
+  * User Mode: Limited access to user data and instructions.
+  * Kernel Mode: Full access to system memory and devices.
+  * System Calls: Switch execution from user to kernel mode.
 
-### Kernel-User Relationship
-- Kernel runs as part of user processes
-- Handles system-level tasks on behalf of user processes
+* **Privileged Instructions**
 
-### Operating System vs Hardware View
-- **OS View**: Sees which *process* is running
-- **Hardware View**: Sees which *mode* is active
+  * Executable only in kernel mode.
+  * Prevent unauthorized access to system-level operations.
 
-### Interrupts
-- Triggered by external devices (clock, I/O)
-- Kernel saves context, handles event, and resumes execution
-- Prioritized handling based on importance
+* **Kernel-User Relationship**
 
-### Exceptions
-- Caused by process errors (divide by zero, illegal memory access)
-- Handled mid-instruction and resumed afterward
-- Treated differently from hardware interrupts
+  * Kernel runs as part of user processes.
+  * Handles system-level tasks on behalf of the user process.
 
-### Unified Handling
-Single mechanism manages both interrupts and exceptions.
+* **Operating System View and Hardware View**
 
-### Processor Execution Levels
-- Kernel masks lower-priority interrupts during critical operations
-- Execution level set using privileged instructions
+  * OS sees which *process* is running.
+  * Hardware sees which *mode* is active.
 
-### Memory Management
-- Kernel resides permanently in main memory
-- Compiler generates virtual addresses
-- Kernel maps virtual to physical addresses using hardware
-- Supports techniques like paging
+**Operating system view and hardware view**
+  ![Operating system view and hardware view](Diagrams/Screen_Shot_2017-06-05_at_5.46.41_PM.png)
+
+* **Interrupts**
+
+  * Triggered by external devices (e.g., clock, I/O).
+  * Kernel saves context, handles the event, and resumes execution.
+  * Prioritized handling based on importance.
+
+* **Exceptions**
+
+  * Caused by process errors (e.g., divide by zero, illegal memory).
+  * Handled mid-instruction and resumed afterward.
+  * Treated differently from hardware interrupts.
+
+* **Unified Handling**
+
+  * Single mechanism used to manage both interrupts and exceptions.
+
+* **Processor Execution Levels**
+
+  * Kernel masks lower-priority interrupts during critical operations.
+  * Execution level set using privileged instructions.
+
+**Typical interrupt levels**
+  ![Typical interrupt levels](Diagrams/Screen_Shot_2017-06-05_at_6.04.33_PM.png)
+
+* **Memory Management**
+
+  * Kernel resides permanently in main memory.
+  * Compiler generates virtual addresses.
+  * Kernel maps virtual to physical addresses using hardware.
+  * Supports techniques like paging.
+
 
 # Introduction to the Kernel
 
 ## Architecture of the UNIX Operating System
 
-The UNIX system supports two fundamental illusions:
-- File system has "places"
-- Processes have "life"
+The UNIX system supports the illusions that the file system has "places" and that processes have "life".
 
-**Files** and **processes** are the two central concepts in the UNIX system model.
+The two entities, files and processes, are the two central concepts in the UNIX system model.
 
-### Core Architecture Components
+**Block Diagram of the System Kernel**
+![Block Diagram of the System Kernel](Diagrams/Screen_Shot_2017-06-05_at_9.00.14_PM.png)
 
-#### System Structure
-- **Three layers**: User, Kernel, and Hardware
-- **System Call Interface**: Boundary between user programs and kernel
+* The *file subsystem* is on the left and the *process control subsystem* is on the right.
+* The diagram shows 3 levels : user, kernel, and hardware.
+* The system call and library interface represent the border between user programs and the kernel.
 
-#### Libraries and System Calls
-- System calls appear as C functions to user programs
-- Libraries translate these into system-level operations
-- Assembly code can call system calls directly
+* **Core Concepts**
 
-### File Subsystem
-- Manages files, space allocation, and access permissions
-- **System calls**: `open`, `read`, `write`, `close`, `stat`, `chown`, `chmod`
-- Uses **buffer cache** for efficient I/O
-- Interacts with:
-  - **Block I/O drivers** (e.g., disk)
-  - **Character/raw I/O drivers** (e.g., terminals, tapes)
+  * UNIX centers around two key entities: **files** and **processes**.
+  * The kernel is divided into two subsystems: **File Subsystem** and **Process Control Subsystem**.
 
-### Process Control Subsystem
-Handles:
-- Process creation & termination
-- Process scheduling
-- Memory management
-- Inter-process communication
+* **System Structure**
 
-**System calls**: `fork`, `exec`, `exit`, `wait`, `brk`, `signal`
+  * Three layers: **User**, **Kernel**, and **Hardware**.
+  * **System Call Interface**: Boundary between user programs and kernel.
 
-### Memory Management
-- Allocates memory fairly across processes
-- Swaps processes between main and secondary memory if needed
-- **Two policies**: Swapping and Demand Paging
-- **Swapper**: Manages memory allocation (distinct from CPU scheduler)
+* **Libraries and System Calls**
 
-### CPU Scheduler
-- Allocates CPU based on priority and time quantum
-- Preempts processes that exceed their time slice
+  * System calls look like C functions.
+  * Libraries translate these into system-level operations.
+  * Assembly code can call system calls directly.
 
-### Interprocess Communication
-- **Signals**: Asynchronous communication
-- **Message passing**: Synchronous communication
+* **File Subsystem**
 
-### Hardware Control
-- Manages hardware interrupts (disk, terminal, etc.)
-- Interrupts serviced by **kernel functions**, not separate processes
-- Interrupted process resumes after interrupt handling
+  * Manages files, space allocation, access permissions.
+  * System calls: `open`, `read`, `write`, `close`, `stat`, `chown`, `chmod`.
+  * Uses **buffer cache** for efficient I/O.
+  * Interacts with:
+
+    * **Block I/O drivers** (e.g., disk).
+    * **Character/raw I/O drivers** (e.g., terminals, tapes).
+
+* **Process Control Subsystem**
+
+  * Handles:
+
+    * Process creation & termination
+    * Process scheduling
+    * Memory management
+    * Inter-process communication
+  * System calls: `fork`, `exec`, `exit`, `wait`, `brk`, `signal`.
+
+* **Memory Management**
+
+  * Allocates memory fairly across processes.
+  * Swaps processes between main and secondary memory if needed.
+  * Two policies: **Swapping** and **Demand Paging**.
+  * **Swapper**: Manages memory allocation (not to be confused with CPU scheduler).
+
+* **CPU Scheduler**
+
+  * Allocates CPU based on priority and time quantum.
+  * Preempts processes that exceed their time slice.
+
+* **Interprocess Communication**
+
+  * Includes:
+
+    * **Signals** (asynchronous)
+    * **Message passing** (synchronous)
+
+* **Hardware Control**
+
+  * Manages hardware interrupts (e.g., from disk or terminal).
+  * Interrupts are serviced by **kernel functions**, not separate processes.
+  * After servicing, the interrupted process resumes.
 
 ## Introduction to System Concepts
 
 ### An Overview of the File Subsystem
 
-#### Inode (Index Node)
-- Internal representation of a file
-- Stores file metadata:
-  - Owner information
-  - Permissions
-  - Timestamps
-  - Disk layout
-- Each file has **one inode**
-- Multiple file names (links) can map to same inode
-- Assigned by kernel when new file is created
+* **Inode (Index Node)**
 
-#### In-Core Structures
+  * Internal representation of a file.
+  * Stores: file metadata (owner, permissions, timestamps, disk layout).
+  * Each file has **one inode**; multiple file names (links) can map to it.
+  * Assigned by kernel when a new file is created.
 
-1. **Inode Table**: Maintained in memory for file access
-2. **File Table**: Global table tracking open files, byte offset, access rights
-3. **User File Descriptor Table**: Per-process table storing open file descriptors
+* **In-Core Structures**
 
-#### File Access Mechanism
-- `open()`/`creat()` create entries in all three tables
-- File descriptor returned → index into user file descriptor table
-- `read()`/`write()` follow file descriptor to inode via table pointers
+  * **Inode Table**: Maintained in memory for file access.
+  * **File Table**: Global; tracks open files, byte offset, access rights.
+  * **User File Descriptor Table**: Per-process; stores open file descriptors.
 
-### Logical vs Physical Devices
+* **File Access Mechanism**
 
-#### Logical Devices
-- Kernel treats file systems as logical devices with unique device numbers
-- Device drivers map **logical addresses** to **physical disk locations**
+  * `open()` / `creat()` create entries in all three tables.
+  * File descriptor returned → index into the user file descriptor table.
+  * `read()` / `write()` follow file descriptor to inode via table pointers.
 
-#### Disk Usage
-- UNIX uses **disks**, not tapes, for file systems
-- File systems can be partitioned for easier management
+**File descriptors, file table, and inode table**
+![File descriptors, file table, and inode table](Diagrams/Screen_Shot_2017-06-05_at_9.25.33_PM.png)
 
-### File System Layout
+### **Logical vs Physical Devices**
 
-#### Logical Block
-- Basic unit of file system storage (typically **1K bytes**)
-- Size uniform within file system but can differ across systems
-- **Trade-off**: Larger blocks = faster transfer; too large = wasted space
+* **Logical Devices**
 
-#### File System Components
+  * Kernel treats file systems as logical devices with unique device numbers.
+  * Device drivers map **logical addresses** to **physical disk locations**.
 
-1. **Boot Block**
-   - First block in the file system
-   - May contain bootstrap code for OS booting
-   - Present in all file systems (even if unused)
+* **Disk Usage**
 
-2. **Super Block**
-   - Contains metadata: size, free space, file limits
-   - Essential for managing file system state
+  * UNIX uses **disks**, not tapes, for file systems.
+  * File systems can be partitioned for easier management.
 
-3. **Inode List**
-   - Contains all file inodes
-   - One inode designated as root inode (for mounting)
-   - Size set during file system configuration
+---
 
-4. **Data Blocks**
-   - Store actual file content and administrative data
-   - Each block belongs to only one file
+### **File System Layout**
+
+* **Logical Block**
+
+  * Basic unit of file system storage (typically **1K bytes**).
+  * Size is uniform within a file system but can differ across systems.
+  * Larger blocks = faster transfer; too large = wasted space.
+
+---
+
+**File system layout**
+![File system layout](Diagrams/Screen_Shot_2017-06-05_at_9.34.48_PM.png)
+
+---
+
+* **Boot Block**
+
+  * First block in the file system.
+  * May contain bootstrap code (to boot the OS).
+  * Present in all file systems (even if unused).
+
+* **Super Block**
+
+  * Contains metadata: size, free space, file limits.
+  * Essential for managing the file system state.
+
+* **Inode List**
+
+  * Contains all file inodes.
+  * One inode is designated as the root inode (for mounting).
+  * Size set during file system configuration.
+
+* **Data Blocks**
+
+  * Store actual file content and admin data.
+  * Each block belongs to only one file.
 
 ## Processes
 
-### Definition
-- A process is the execution of a program
-- Consists of: **text** (instructions), **data**, and **stack**
-- Communicates with others via **system calls**
+* **Definition**
 
-### Process Creation
-- Created using `fork()` system call
-- **Parent process** creates **child process**
-- All processes (except **process 0**) created this way
-- **Process 0**: Manually created during boot → becomes **swapper**
-- **Process 1 (init)**: Ancestor of all other processes
+  * A process is the execution of a program.
+  * Consists of: **text** (instructions), **data**, and **stack**.
+  * Communicates with others via **system calls**.
 
-### Executable File Structure
-- **Headers**: File attributes
-- **Program text**: Machine instructions
-- **Initialized data**: Stored in executable (e.g., `int version = 1;`)
-- **Uninitialized data**: `bss` section (e.g., `char buffer[2048];`)
-- **Other info**: Symbol tables, etc.
+---
+
+* **Process Creation**
+
+  * Created using the `fork()` system call.
+  * **Parent process** creates a **child process**.
+  * All processes (except **process 0**) are created this way.
+  * **Process 0** is manually created during boot → becomes the **swapper**.
+  * **Process 1 (init)** is the ancestor of all other processes.
+
+---
+
+* **Executable File Structure**
+
+  * Headers: file attributes.
+  * Program text: machine instructions.
+  * Initialized data: stored in the executable (e.g., `int version = 1;`).
+  * Uninitialized data: `bss` section (e.g., `char buffer[2048];`).
+  * Other info: symbol tables, etc.
 
 ```c
 char buffer[2048];  // bss
 int version = 1;    // initialized data
 ```
 
-### Memory Regions After `exec()`
-- **Text**: Code section
-- **Data**: Initialized + bss section
-- **Stack**: Created at runtime, grows dynamically
-  - Holds: function parameters, local variables, return data
+---
 
-### Stacks
-- **User Stack**: Used during user mode execution
-- **Kernel Stack**: Used after system call (kernel mode)
-- Switch triggered via **trap instruction** on system call
+* **Memory Regions After `exec()`**
 
-### Process Data Structures
+  * **Text**: code section.
+  * **Data**: initialized + bss section.
+  * **Stack**: created at runtime, grows dynamically.
 
-#### Process Table
-- Holds global process information:
-  - Process ID (PID)
-  - State (running, sleeping, etc.)
-  - User ID (UID)
-  - Event descriptor for sleeping state
+    * Holds: function parameters, local vars, return data.
 
-#### u Area
-- **Kernel-only memory space**
-- Stores process-specific runtime data:
-  - Pointer to process table entry
-  - System call parameters, return values, error codes
-  - Open file descriptors
-  - I/O parameters
-  - Current directory and root
-  - Size limits (file/process)
+---
 
-### Memory Regions and Sharing
-Managed via:
-- **Per-Process Region Table** → links to global **Region Table**
+* **Stacks**
 
-Supports:
-- Shared memory across processes
-- Copy-on-write on `fork()`
-- Memory release on `exit()`
+  * **User Stack**: used during user mode execution.
+  * **Kernel Stack**: used after system call (kernel mode).
+  * Switch triggered via a **trap instruction** on system call.
 
-## Context of a Process
+**User and Kernel stack**
+![User and Kernel stack](Diagrams/Screen_Shot_2017-06-05_at_10.08.31_PM.png)
 
-### Context Includes:
-- Program code (text)
-- Global variables and data
-- CPU registers
-- Process table slot
-- u area
-- User and kernel stacks
+---
 
-### Not Included:
-- OS code and global kernel data (shared by all processes)
+* **Process Data Structures**
 
-### Context Switch
-- Happens when system switches from one process to another
-- Saves current process state and loads the new one
+  * **Process Table**:
 
-### Important Distinctions
-- **Mode Switch ≠ Context Switch**: Switching between user ↔ kernel mode is **not** a context switch
-- **Interrupt Handling**: Interrupts served **in kernel mode**, handled **within the context** of interrupted process
+    * Holds global process info (PID, state, UID, etc.)
+  * **u Area**:
 
-## Process States
+    * Kernel-only memory space.
+    * Stores process-specific runtime data.
 
-1. **User Running**: Process currently executing in user mode
-2. **Kernel Running**: Process currently executing in kernel mode
-3. **Ready to Run**: Process not executing, but ready to run when scheduler chooses it
-4. **Sleeping**: Process is sleeping
+* **Process Table Fields**
 
-> **Note**: Since a processor can execute only one process at a time, at most one process may be in states 1 and 2.
+  * State (running, sleeping, etc.)
+  * User ID (UID)
+  * Event descriptor for sleeping state
 
-## State Transitions
+* **u Area Fields**
 
-Processes move continuously between states according to well-defined rules. A **state transition diagram** represents:
-- **Nodes**: Process states
-- **Edges**: Events triggering transitions
+  * Pointer to process table entry
+  * System call parameters, return values, error codes
+  * Open file descriptors
+  * I/O parameters
+  * Current directory and root
+  * Size limits (file/process)
 
-### Key Transition Rules
-- Kernel **allows context switches only** when process moves from **kernel running** → **asleep in memory**
-- Processes running in kernel mode are **non-preemptive** (cannot be interrupted by others)
-- This protects kernel data structures from corruption during critical operations
+**Data structures for processes**
+![Data structures for processes](Diagrams/Screen_Shot_2017-06-05_at_10.07.13_PM.png)
 
-### Critical Section Example
-```c
-// Inserting node bp1 into doubly linked list
-bp1->forp = bp->forp;
-bp1->backp = bp;
-bp->forp = bp1;
-// possible context switch here - DANGEROUS!
-bp1->forp->backp = bp1;
-```
+---
 
-If context switch occurs at marked line, linked list becomes inconsistent, risking corruption.
+* **Memory Regions and Sharing**
 
-### Protection Mechanisms
-To avoid corruption, kernel:
-- Raises **processor execution level** during **critical regions** to block interrupts
-- Critical regions are small code sections manipulating shared kernel data
-- User-mode processes are **periodically preempted** by scheduler to prevent CPU monopolization
+  * Managed via:
 
-## Sleep and Wakeup
+    * **Per-Process Region Table** → links to global **Region Table**
+  * Supports:
 
-### Key Principles
-- Process decides **on its own initiative** when to sleep or wake up
-- Other processes can suggest alternatives, but process makes final decision
-- **Interrupt handlers cannot sleep** (would suspend interrupted process by default)
+    * Shared memory across processes
+    * Copy-on-write on `fork()`
+    * Memory release on `exit()`
 
-### Sleep Mechanism
-- Processes **sleep on an event**
-- Remain in **sleep state** until event occurs
-- When event occurs, **all processes sleeping on that event wake up**
-- Move from **sleep** → **ready-to-run** state (not running immediately)
-- Sleeping processes **do not consume CPU**
+---
 
-### Kernel Locking Mechanism
+## Context of a process
 
-**Acquiring lock:**
-```c
-while (condition is true)
-    sleep(event: condition becomes false);
-set condition true;
-```
+* **Context includes:**
 
-**Releasing lock:**
-```c
-set condition false;
-wakeup(event: condition is false);
-```
+  * Program code (text)
+  * Global variables and data
+  * CPU registers
+  * Process table slot
+  * u area
+  * User and kernel stacks
 
-### Example: Buffer Lock Contention
-Three processes (A, B, C) contend for same locked buffer:
-1. All sleep on buffer lock event
-2. When unlocked, all wake up and move to ready state
-3. Kernel picks one (say B), which locks buffer and proceeds
-4. Others (A, C) sleep again if buffer remains locked
+* **Not included:**
+
+  * OS code and global kernel data (shared by all processes)
+
+* **Context Switch:**
+
+  * Happens when the system switches from one process to another
+  * Saves current process state and loads the new one
+
+* **Mode Switch ≠ Context Switch:**
+
+  * Switching between user ↔ kernel mode is **not** a context switch
+
+* **Interrupt Handling:**
+
+  * Interrupts are served **in kernel mode**
+  * Handled **within the context** of the interrupted process
+
+---
+
+
+## Process states
+
+1. Process is currently executing in user mode.
+2. Process is currently executing in kernel mode.
+3. Process is not executing, but it is ready to run as soon as the scheduler chooses it.
+4. Process is sleeping.
+
+Because a processor can execute only one process at a time, at most one process may be in states 1 and 2.
+
+## State transitions
+
+* Processes move continuously between states according to well-defined rules.
+
+* A **state transition diagram** represents:
+
+  * **Nodes:** process states
+  * **Edges:** events triggering transitions
+
+**Process States and Transitions**
+![Process States and Transitions](Diagrams/Screen_Shot_2017-06-06_at_11.12.56_PM.png)
+
+* The kernel **allows context switches only** when a process moves from **kernel running** → **asleep in memory**.
+
+* Processes running in kernel mode are **non-preemptive** (cannot be interrupted by others).
+
+* This protects kernel data structures from corruption during critical operations.
+
+* **Example: Inserting a node `bp1` into a doubly linked list**
+
+  ```c
+  bp1->forp = bp->forp;
+  bp1->backp = bp;
+  bp->forp = bp1;
+  // possible context switch here
+  bp1->forp->backp = bp1;
+  ```
+
+* If a context switch happens at the marked line, the linked list becomes inconsistent, risking corruption if modified by another process.
+
+**Incorrect linked list because of context switch**
+![Incorrect linked list because of context switch](Diagrams/Screen_Shot_2017-06-06_at_11.21.21_PM.png)
+
+* To avoid this, the kernel:
+
+  * Raises the **processor execution level** during **critical regions** to block interrupts.
+  * Critical regions are small code sections that manipulate shared kernel data.
+
+* User-mode processes are **periodically preempted** by the scheduler to prevent CPU monopolization.
+
+---
+
+## Sleep and wakeup
+
+* A process decides **on its own initiative** when to sleep or wake up.
+
+* Other processes can suggest alternatives, but a process makes the final decision.
+
+* **Interrupt handlers cannot sleep**, because that would suspend the interrupted process by default.
+
+* Processes **sleep on an event**, meaning:
+
+  * They remain in the **sleep state** until the event occurs.
+  * When the event occurs, **all processes sleeping on that event wake up**.
+  * They move from **sleep** → **ready-to-run** state (not running immediately).
+  * Sleeping processes **do not consume CPU**; the kernel waits for events to wake them.
+
+* When modifying critical data structures, the kernel:
+
+  * Checks if a lock (condition) is set by another process.
+  * If locked, process **sleeps on the event** that the lock becomes free.
+  * When unlocked, the process wakes up and locks the resource to proceed.
+
+* Kernel locking mechanism:
+
+  ```c
+  while (condition is true)
+      sleep(event: condition becomes false);
+  set condition true;
+  ```
+
+* Unlocking and waking up waiting processes:
+
+  ```c
+  set condition false;
+  wakeup(event: condition is false);
+  ```
+
+* **Example:** Three processes (A, B, C) contend for the same locked buffer:
+
+  * All sleep on the buffer lock event.
+  * When unlocked, all wake up and move to ready state.
+  * Kernel picks one (say B), which locks the buffer and proceeds.
+  * Others (A, C) sleep again if the buffer remains locked.
+
+**Multiple processes sleeping on a lock**
+![Multiple processes sleeping on a lock](Diagrams/Screen_Shot_2017-06-07_at_5.36.08_PM.png)
+
 
 ## Kernel Data Structures
 
-### Design Characteristics
-- Kernel data structures mostly use **fixed-size tables** instead of dynamic allocation
-- **Advantage**: Simpler kernel code and easier algorithms
-- **Disadvantage**: Limited number of entries based on initial configuration
-  - If system runs out of entries, cannot allocate more dynamically
-  - Must return error
-  - Over-provisioning wastes memory but ensures stability
-- Kernel algorithms often use **simple loops** to find free entries
+* Kernel data structures mostly use **fixed-size tables** instead of dynamic allocation.
+* **Advantage:** Simpler kernel code and easier algorithms.
+* **Disadvantage:** Limited number of entries based on initial configuration.
+
+  * If the system runs out of entries, it **cannot allocate more dynamically** and must return an error.
+  * Over-provisioning wastes memory but ensures stability.
+* Kernel algorithms often use **simple loops** to find free entries, prioritizing simplicity and efficiency over complex allocation schemes.
+
+---
 
 ## System Administration
 
-### Administrative Processes
-Perform tasks for overall user welfare:
-- Disk formatting
-- Creating and repairing file systems
-- Kernel debugging
+* Administrative processes perform tasks for the overall welfare of users, e.g.,
 
-### Key Characteristics
-- Use **same system calls** as regular user processes
-- **Difference**: Have special rights and privileges
-- Kernel distinguishes **superuser** with elevated privileges
+  * Disk formatting
+  * Creating and repairing file systems
+  * Kernel debugging
+* These processes use the **same system calls** as regular user processes.
+* Difference: They have **special rights and privileges**.
+* The kernel distinguishes a **superuser** with elevated privileges.
+* A user becomes superuser by:
 
-### Becoming Superuser
-- Logging in with special credentials
-- Running special programs
+  * Logging in with special credentials
+  * Running special programs
+* The kernel treats administrative processes like normal processes but enforces privilege-based access control.
 
-Kernel treats administrative processes like normal processes but enforces privilege-based access control.
+---
+
 
 # The Buffer Cache
 
-## Purpose
-The buffer cache is an internal memory pool that the kernel uses to cache recently accessed disk blocks. It minimizes slow disk I/O operations by keeping frequently accessed data in faster main memory.
+**Purpose:**
+The buffer cache is an internal memory pool that the kernel uses to cache recently accessed disk blocks. It helps minimize slow disk I/O operations by keeping frequently accessed data in faster main memory.
 
-## How Buffer Cache Works
+---
 
-### Cache Operations
-- When process requests file data, kernel first checks buffer cache
-- **Cache hit**: Kernel serves data directly from memory—avoiding disk access
-- **Cache miss**: Kernel reads data from disk into buffer cache, then provides to process
-- For writing: Data cached first and written to disk later (**delayed write**) to reduce disk write frequency
+### How Buffer Cache Works:
 
-### Architecture Placement
-- Buffer cache sits between **file subsystem** (manages files/directories) and **block device drivers** (handle actual disks)
-- Acts as bridge, caching disk blocks for faster access
+* When a process requests file data, the kernel first checks the buffer cache.
+* If the data is in the cache (**cache hit**), the kernel serves it directly from memory—avoiding disk access.
+* If not (**cache miss**), the kernel reads the data from disk into the buffer cache, then provides it to the process.
+* Similarly, when writing, data is cached first and written to disk later (**delayed write**) to reduce disk write frequency.
 
-### Key Data Structures Cached
-- **File data blocks**: Actual content of files
-- **Super block**: Metadata describing file system structure and free space
-- **Inode**: Metadata describing individual files (layout, permissions, etc.)
+---
 
-### Advantages
-- **Reduces disk I/O**: Keeps frequently accessed blocks in memory
-- **Speeds up access**: Memory access significantly faster than disk
-- **Improves system performance**: Enhances overall throughput and responsiveness
+### Placement in Kernel Architecture:
 
-### Disadvantages
-- **Memory overhead**: Consumes part of main memory
-- **Added complexity**: Kernel algorithms for caching and eviction more complex
-- **Risk of data loss**: If data is delayed-written and system crashes, unsaved changes might be lost
+* Buffer cache sits between the **file subsystem** (which manages files and directories) and **block device drivers** (which handle the actual disks).
+* It acts as a bridge, caching disk blocks for faster access.
+
+---
+
+### Key Data Structures Cached:
+
+* **File data blocks**: Actual content of files.
+* **Super block**: Metadata describing the file system structure and free space.
+* **Inode**: Metadata describing individual files (file layout, permissions, etc.).
+
+---
+
+### Advantages of Buffer Cache:
+
+* **Reduces disk I/O:** By keeping frequently accessed blocks in memory.
+* **Speeds up access:** Memory access is significantly faster than disk.
+* **Improves system performance:** Enhances overall throughput and responsiveness.
+
+---
+
+### Disadvantages of Buffer Cache:
+
+* **Memory overhead:** Consumes part of main memory.
+* **Added complexity:** Kernel algorithms for caching and eviction become more complex.
+* **Risk of data loss:** If data is delayed-written and the system crashes, unsaved changes might be lost.
+
+---
+
+### Summary:
+
+The buffer cache optimizes file system performance by caching disk blocks in main memory. It balances between fast memory access and the slow disk, using algorithms to decide what to keep or write back to disk, improving both read and write efficiency.
+
+---
 
 ## Buffer Headers
 
-During system initialization, kernel allocates space for configurable number of buffers based on memory size and performance constraints.
+During system initialization, the kernel allocates space for a number of buffers, configurable according to memory size and performance constraints.
 
-### Buffer Components
-1. **Memory array**: Contains data from disk
-2. **Buffer header**: Identifies the buffer
+Two parts of the buffer:
 
-### Key Principles
-- Data in buffer corresponds to data in logical disk block on file system
-- **Important**: Disk block can **never** map into more than one buffer at a time
+1. a memory array that contains data from the disk.
+2. *buffer header* that identifies the buffer.
 
-### Buffer Header Fields
-- **Device number**: Specifies logical file system (not physical device)
-- **Block number**: Block number of data on disk
-- **Status field**: Summarizes current buffer status
-- **Pointer to data area**: Points to data area (≥ disk block size)
+Data in a buffer corresponds to data in a logical disk block on a file system. A disk block can **never** map into more than one buffer at a time.
 
-### Buffer Status Conditions
-- Buffer is locked/busy
-- Buffer contains valid data
-- Kernel must write buffer contents to disk before reassigning (**delayed-write**)
-- Kernel currently reading/writing buffer contents to/from disk
-- Process currently waiting for buffer to become free
+**Buffer header**
+![Buffer header](Diagrams/Screen_Shot_2017-06-07_at_10.27.45_PM.png)
 
-### Buffer Header Structure
-Two sets of pointers for traversal of buffer queues (doubly linked circular lists).
+The *device number* fields specifies the logical file system (not physical device) and *block number* block number of the data on disk. These two numbers *uniquely* identify the buffer. The *status* field summarizes the current status of the buffer. The *ptr to data area* is a pointer to the data area, whose size must be at least as big as the size of a disk block.
+
+The status of a buffer is a combination of the following conditions:
+
+* Buffer is locked / busy
+* Buffer contains valid data
+* Kernel must write the buffer contents to disk before reassigning the buffer; called as "delayed-write"
+* Kernel is currently reading or writing the contexts of the buffer to disk
+* A process is currently waiting for the buffer to become free.
+
+The two set of pointers in the header are used for traversal of the buffer queues (doubly linked circular lists).
 
 ## Structure of the Buffer Pool
 
-### LRU Algorithm
-Kernel follows **Least Recently Used (LRU)** algorithm for buffer pool.
+The kernel follows the *least recently unused (LRU)* algorithm for the buffer pool. The kernel maintains a *free list* of buffers that preserves the least recently used order. Dummy buffer header marks the beginning and end of the list. All the buffers are put on the free list when the system is booted. When the kernel wants *any* buffer, it takes it from the head of the free list. But it can also take a specific buffer from the list. The used buffers, when become free, are attached to the end of the list, hence the buffers closer and closer to the head of the list are the least recently used ones.
 
-### Free List Management
-- Kernel maintains **free list** preserving LRU order
-- Dummy buffer header marks beginning and end of list
-- All buffers put on free list when system boots
-- When kernel wants **any** buffer: takes from head of free list
-- When kernel wants **specific** buffer: can take from anywhere in list
-- Used buffers, when freed: attached to end of list
-- Buffers closer to head = least recently used
+**Free list of buffers**
+![Free list of buffers](Diagrams/Screen_Shot_2017-06-07_at_10.44.09_PM.png)
 
-### Hash Queues
-To avoid searching entire buffer pool, kernel organizes buffers into separate queues, **hashed** as function of device and block number.
+When the kernel accesses a disk block, it searches for the buffer with the appropriate device-block number combination. Rather than search the entire buffer pool, it organizes the buffers into separate queues, *hashed* as a function of the device and block number. The hash queues are also doubly linked circular lists. A hashing function which uniformly distributes the buffers across the lists is used. But it also has to be simple so that the performance does not suffer.
 
-#### Hash Queue Characteristics
-- Hash queues are doubly linked circular lists
-- Hashing function uniformly distributes buffers across lists
-- Must be simple to maintain performance
-- Hash function depends on both device number and block number
+**Buffers on the Hash Queues**
+![Buffers on the Hash Queues](Diagrams/Screen_Shot_2017-06-07_at_10.52.09_PM.png)
 
-#### Important Rules
-- Every disk block in buffer pool exists on **one and only one** hash queue
-- Appears only **once** on that queue
-- Presence on hash queue ≠ busy (could be on free list if status is free)
-- **Key principle**: Buffer always on hash queue, but may/may not be on free list
+The hash function shown in the figure only depends on the block number; real hash functions depend on device number as well.
 
-### Buffer Allocation Strategy
-- **Specific buffer needed**: Search appropriate hash queue
-- **Any buffer needed**: Remove buffer from free list
+Every disk block in the buffer pool exists on one and only one hash queue and only once on that queue. However, presence of a buffer on a hash queue does not mean that it is busy, it could well be on the free list as well if its status is free.
+
+Therefore, if the kernel wants a particular buffer, it will search it on the queue. But if it wants *any* buffer, it removes a buffer from the free list. **A buffer is always on a hash queue, but it may or may not be on the free list**
 
 ## Scenarios for Retrieval of a Buffer
 
-The `getblk` algorithm handles buffer allocation with five typical scenarios:
+The algorithms for reading and writing disk blocks use the algorithm *getblk* to allocate buffers from the pool. There are 5 typical scenarios the kernel may follow in *getblk* to allocate a buffer for a disk block.
 
-### Scenario 1: Block Found and Buffer Free
-- Block found on hash queue
-- Buffer is free and available
+1. Block is found on its hash queue and its buffer is free.
+2. Block could not be found on the hash queue, so a buffer from the free list is allocated.
+3. Block could not be found on the hash queue, and when allocating a buffer from free list, a buffer marked "delayed write" is allocated. Then the kernel must write the "delayed write" buffer to disk and allocate another buffer.
+4. Block could not be found on the hash queue and the free list of buffers is empty.
+5. Block was found on the hash queue, but its buffer is currently busy.
 
-### Scenario 2: Block Not Found, Free Buffer Available
-- Block not found on hash queue
-- Buffer allocated from free list
-- Buffer's device and block numbers changed
+The algorithm *getblk* is given below (scenarios stated above are marked in the comments) :
 
-### Scenario 3: Block Not Found, Delayed Write Buffer Allocated
-- Block not found on hash queue
-- Buffer from free list marked "delayed write"
-- Kernel must write delayed write buffer to disk first
-- Then allocate another buffer
-
-### Scenario 4: Block Not Found, No Free Buffers
-- Block not found on hash queue
-- Free list of buffers is empty
-- Process must sleep until buffer becomes available
-
-### Scenario 5: Block Found But Buffer Busy
-- Block found on hash queue
-- Buffer currently busy/locked
-- Process must wait for buffer to become free
-
-## Algorithm: getblk
-
-```c
+```
 /*
- * Algorithm: getblk
- * Input: file system number, block number
- * Output: locked buffer that can now be used for block
+ *  Algorithm: getblk
+ *  Input: file system number
+ *          block number
+ *  Output: locked buffer that can now be used for block
  */
+
 {
-    while (buffer not found)
-    {
-        if (block in hash queue)
-        {
-            if (buffer busy)   // scenario 5
-            {
-                sleep (event: buffer becomes free);
-                continue;      // back to while loop
-            }
-            mark buffer busy;  // scenario 1
-            remove buffer from free list;
-            return buffer;
-        }
-        else
-        {
-            if (there are no buffers on the free list)
-            {
-                sleep (event: any buffer becomes free);   // scenario 4
-                continue;      // back to while loop
-            }
-            remove buffer from free list;
-            if (buffer marked for delayed write)         // scenario 3
-            {
-                asynchronous write buffer to disk;
-                continue;      // back to while loop
-            }
-            // scenario 2
-            remove buffer from old hash queue;
-            put buffer onto new hash queue;
-            return buffer;
-        }
-    }
+	while (buffer not found)
+	{
+		if (block in hash queue)
+		{
+			if (buffer busy)   // scenario 5
+			{
+				sleep (event: buffer becomes free);
+				continue;      // back to while loop
+			}
+			mark buffer busy;  // scenario 1
+			remove buffer from free list;
+			return buffer;
+		}
+		else
+		{
+			if (there are no buffers on the free list)
+			{
+				sleep (event: any buffer becomes free);   // scenario 4
+				continue;      // back to while loop
+			}
+			remove buffer from free list;
+			if (buffer marked for delayed write)         // scenario 3
+			{
+				asynchronous write buffer to disk;
+				continue:      // back to while loop;
+			}
+			// scenario 2
+			remove buffer from old hash queue;
+			put buffer onto new hash queue;
+			return buffer;
+		}
+	}
 }
+
 ```
 
-### Buffer Usage Protocol
-- Kernel always marks buffer as **busy** during use
-- Prevents other processes from accessing it
-- When finished, kernel releases buffer using `brelse` algorithm
+When using the buffer, the kernel always marks the buffer as busy so that no other process can access it. When the kernel finishes using the buffer, it releases the buffer according to the algorithm *brelse*.
 
-## Algorithm: brelse
+The algorithm *brelse* is given below :
 
-```c
-/*
- * Algorithm: brelse
- * Input: locked buffer
- * Output: none
+```
+/*  Algorithm: brelse
+ *  Input: locked buffer
+ *  Output: none
  */
+ 
 {
-    wakeup all processes (event: waiting for any buffer to become free);
-    wakeup all processes (event: waiting for this buffer to become free);
-    raise processor execution level to block interrupts;
-    if (buffer contents valid and buffer not old)
-        enqueue buffer at end of free list;
-    else
-        enqueue buffer at beginning of free list;
-    lower processor execution level to allow interrupts;
-    unlock (buffer);
-}
+	wakeup all processes (event: waiting for any buffer to become free;
+	wakeup all processes (event: waiting for this buffer to become free;
+	raise processor execution level to block interrupts;
+	if (buffer contents valid and buffer not old)
+		enqueue buffer at end of free list;
+	else
+		enqueue buffer at beginning of free list;
+	lower processor execution level to allow interrupts;
+	unlock (buffer);
+} 
 ```
 
-### Buffer Placement Strategy
-- **Valid, recent data**: Buffer placed at **end** of free list (LRU strategy)
-- **Invalid or old data**: Buffer placed at **beginning** of free list
-  - "Old" = marked as "delayed write"
-  - Invalid = I/O corruption or other issues
+Buffer contents are old only if it is marked as "delayed write", in that case and in the case where the data is not valid (for example, due to I/O corruption), the buffer is put in the beginning of the free list as its data is not valid or old. Otherwise the data is valid as the buffer is put at the end to follow the LRU strategy.
 
-### Race Condition Handling
-**Important guarantee**: Kernel ensures all processes waiting for buffers will wake up, because it:
-- Allocates buffers during system call execution
-- Frees them before returning
+The states of hash queues for different scenarios are shown in following figures :
+
+Scenario 1
+
+**Scenario 1**
+![Scenario 1](Diagrams/Screen_Shot_2017-06-07_at_11.28.20_PM.png)
+
+Scenario 2
+
+Here the buffer is not on the hash queue, so a buffer from free list is removed and then its device and block numbers are changed.
+
+**Scenario 2**
+![Scenario 2](Diagrams/Screen_Shot_2017-06-07_at_11.30.35_PM.png)
+
+Scenario 3
+
+**Scenario 3**
+![Scenario 3](Diagrams/Screen_Shot_2017-06-07_at_11.30.14_PM.png)
+
+Scenario 4
+
+**Scenario 4**
+![Scenario 4](Diagrams/Screen_Shot_2017-06-07_at_11.31.17_PM.png)
+
+Race for free buffer
+
+**Race for free buffer**
+![Race for free buffer](Diagrams/Screen_Shot_2017-06-07_at_11.48.55_PM.png)
+
+Scenario 5
+
+**Scenario 5**
+![Scenario 5](Diagrams/Screen_Shot_2017-06-07_at_11.50.00_PM.png)
+
+Race for a locked buffer **(this is an important race condition)**
+
+**Race for a locked buffer**
+![Race for a locked buffer](Diagrams/Screen_Shot_2017-06-07_at_11.53.00_PM.png)
+
+**The kernel guarantees that all processes waiting for buffers will wake up, because it allocates buffers during execution of system calls and frees them before returning.**
+
 
 ## Reading and Writing Disk Blocks
 
-### Algorithm: bread (Block Read)
+This is the algorithm (*bread*) for reading data from the disk:
 
-```c
-/*
- * Algorithm: bread
- * Input: file system number, block number
- * Output: buffer containing data
+```
+/*  Algorithm: bread
+ *  Input: file system number
+ *         block number
+ *  Output: buffer containing data
  */
+ 
 {
-    get buffer for block (algorithm: getblk);
-    if (buffer data valid)
-        return buffer;
-    initiate disk read;
-    sleep (event: disk read complete);
-    return buffer;
+	get buffer for block (algorithm: getblk);
+	if (buffer data valid)
+		return buffer;
+	initiate disk read;
+	sleep (event: disk read complete);
+	return buffer;
 }
 ```
 
-### Read Process
-1. If data not in buffer pool, kernel initiates disk read
-2. Driver "schedules" read request to disk controller
-3. Controller copies data from disk to buffer
-4. Disk interrupt handler awakens sleeping process
+If the data is not found in the buffer pool, the kernel initiates disk read. The driver "schedules" a read request to the disk controller, which copies the data from the disk to the buffer and then the disk interrupt handler awakens the sleeping process.
 
-### Read-Ahead Optimization
-Higher-level algorithms anticipate need for next disk block during sequential file access. Second read is asynchronous—kernel expects data to be available when needed.
+The higher level algorithms anticipate the need for the next disk block if a sequential file access is being done. The second read is asynchronous. The kernel expects the data to be there for the second block when it wants.
 
-### Algorithm: breada (Block Read-Ahead)
+The algorithm *breada* (bread-ahead) is given below:
 
-```c
-/*
- * Algorithm: breada
- * Input: file system number and block number for immediate read
- *        file system number and block number for asynchronous read
- * Output: buffer containing data for immediate read
+```
+/*  Algorithm: breada
+ *  Input: file system number and block number for immediate read
+ *         file system number and block number for asynchronous read
+ *  Output: buffer containing data for immediate read
  */
+ 
 {
-    if (first block not in cache)
-    {
-        get buffer for first block (algorithm: getblk);
-        if (buffer data not valid)
-            initiate disk read;
-    }
-    if (second block not in cache)
-    {
-        get buffer for second block (algorithm: getblk);
-        if (buffer data valid)
-            release buffer (algorithm: brelse);
-        else
-            initiate disk read;
-    }
-    if (first block was originally in the cache)
-    {
-        read first block (algorithm: bread);
-        return buffer;
-    }
-    sleep (event: first buffer contains valid data);
-    return buffer;
+	if (first block not in cache)
+	{
+		get buffer for first block (algorithm: bread);
+		if (buffer data not valid)
+			initiate disk read;
+	}
+	if (second block not in cache)
+	{
+		get buffer for second block (algorithm: getblk);
+		if (buffer data valid)
+			release buffer (algorithm: brelse);
+		else
+			initiate disk read;
+	}
+	if (first block was originally in the cache)
+	{
+		read first block (algorithm: bread);
+		return buffer;
+	}
+	sleep (event: first buffer contains valid data);
+	return buffer;
 }
 ```
 
-### Read-Ahead Strategy
-- If second block data found in buffer cache: release immediately (not needed right away)
-- Will be acquired when data actually needed
+Note: in the algorithm above, the line: `get buffer for first block (algorithm: bread)` is not correct in my opinion. The algorithm here should be `getblk` and not `bread` as we are checking for validity and initiating a disk read both of which are done internally in `bread`. So the algorithm here should be `getblk`. It might just be a printing mistake in the book.
 
-### Algorithm: bwrite (Block Write)
+If we get the data for the second block in the buffer cache, we release it immediately as we do not need it right away. It will be acquired when the data is actually needed.
 
-```c
-/*
- * Algorithm: bwrite
- * Input: buffer
- * Output: none
+The algorithm (*bwrite*) for writing contents of a buffer to a disk block is given below:
+
+```
+/*  Algorithm: bwrite
+ *  Input: buffer
+ *  Output: none
  */
+
 {
-    initiate disk write;
-    if (I/O synchronous)
-    {
-        sleep (event: I/O complete);
-        release buffer (algorithm: brelse);
-    }
-    else if (buffer marked for delayed write)
-        mark buffer to put at head of free list;
+	initiate disk write;
+	if (I/O synchronous)
+	{
+		sleep (event: I/O complete);
+		release buffer (algorithm: brelse);
+	}
+	else if (buffer marked for delayed write)
+			mark buffer to put at head of free list;
 }
 ```
 
-### Asynchronous I/O Considerations
-Due to two asynchronous I/O operations:
-- Block read ahead
-- Delayed write
-
-Kernel can invoke `brelse` from interrupt handler, so it must prevent interrupts in any procedure manipulating buffer free list.
+Because of the two asynchronous I/O operations -- block read ahead and delayed write -- the kernel can invoke *brelse* from an interrupt handler. Hence, it must prevent interrupts in any procedure that manipulates the buffer free list.
