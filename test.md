@@ -14,8 +14,10 @@
 
 ## High-level Architecture of UNIX Systems
 
+---
 **Architecture of UNIX Systems**
-![Architecture of UNIX Systems](Diagrams/Screen_Shot_2017-06-05_at_4.39.07_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-05_at_4.39.07_PM.png" alt="Architecture of UNIX Systems" width="600px">
+---
 
 * Layer-1: Hardware: It consists of all hardware related information.
 * Layer-2: Kernel: This is the core of the Operating System. It is a software that acts as the interface between the hardware and the software. Most of the tasks like memory management, file management, network management, process management, etc., are done by the kernel.
@@ -84,8 +86,10 @@ Programs such as the shell and editors shown in the outer layers interact with t
   * OS sees which *process* is running.
   * Hardware sees which *mode* is active.
 
+---
 **Operating system view and hardware view**
-  ![Operating system view and hardware view](Diagrams/Screen_Shot_2017-06-05_at_5.46.41_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-05_at_5.46.41_PM.png" alt="Operating system view and hardware view" width="600px">
+---
 
 * **Interrupts**
 
@@ -108,8 +112,10 @@ Programs such as the shell and editors shown in the outer layers interact with t
   * Kernel masks lower-priority interrupts during critical operations.
   * Execution level set using privileged instructions.
 
+---
 **Typical interrupt levels**
-  ![Typical interrupt levels](Diagrams/Screen_Shot_2017-06-05_at_6.04.33_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-05_at_6.04.33_PM.png" alt="Typical interrupt levels" width="600px">
+---
 
 * **Memory Management**
 
@@ -127,8 +133,10 @@ The UNIX system supports the illusions that the file system has "places" and tha
 
 The two entities, files and processes, are the two central concepts in the UNIX system model.
 
+---
 **Block Diagram of the System Kernel**
-![Block Diagram of the System Kernel](Diagrams/Screen_Shot_2017-06-05_at_9.00.14_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-05_at_9.00.14_PM.png" alt="Block Diagram of the System Kernel" width="600px">
+---
 
 * The *file subsystem* is on the left and the *process control subsystem* is on the right.
 * The diagram shows 3 levels : user, kernel, and hardware.
@@ -218,8 +226,10 @@ The two entities, files and processes, are the two central concepts in the UNIX 
   * File descriptor returned → index into the user file descriptor table.
   * `read()` / `write()` follow file descriptor to inode via table pointers.
 
+---
 **File descriptors, file table, and inode table**
-![File descriptors, file table, and inode table](Diagrams/Screen_Shot_2017-06-05_at_9.25.33_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-05_at_9.25.33_PM.png" alt="File descriptors, file table, and inode table" width="600px">
+---
 
 ### **Logical vs Physical Devices**
 
@@ -245,8 +255,10 @@ The two entities, files and processes, are the two central concepts in the UNIX 
 
 ---
 
+---
 **File system layout**
-![File system layout](Diagrams/Screen_Shot_2017-06-05_at_9.34.48_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-05_at_9.34.48_PM.png" alt="File system layout" width="600px">
+---
 
 ---
 
@@ -323,8 +335,10 @@ int version = 1;    // initialized data
   * **Kernel Stack**: used after system call (kernel mode).
   * Switch triggered via a **trap instruction** on system call.
 
+---
 **User and Kernel stack**
-![User and Kernel stack](Diagrams/Screen_Shot_2017-06-05_at_10.08.31_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-05_at_10.08.31_PM.png" alt="User and Kernel stack" width="600px">
+---
 
 ---
 
@@ -353,8 +367,10 @@ int version = 1;    // initialized data
   * Current directory and root
   * Size limits (file/process)
 
+---
 **Data structures for processes**
-![Data structures for processes](Diagrams/Screen_Shot_2017-06-05_at_10.07.13_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-05_at_10.07.13_PM.png" alt="Data structures for processes" width="600px">
+---
 
 ---
 
@@ -421,8 +437,10 @@ Because a processor can execute only one process at a time, at most one process 
   * **Nodes:** process states
   * **Edges:** events triggering transitions
 
+---
 **Process States and Transitions**
-![Process States and Transitions](Diagrams/Screen_Shot_2017-06-06_at_11.12.56_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-06_at_11.12.56_PM.png" alt="Process States and Transitions" width="600px">
+---
 
 * The kernel **allows context switches only** when a process moves from **kernel running** → **asleep in memory**.
 
@@ -442,8 +460,10 @@ Because a processor can execute only one process at a time, at most one process 
 
 * If a context switch happens at the marked line, the linked list becomes inconsistent, risking corruption if modified by another process.
 
+---
 **Incorrect linked list because of context switch**
-![Incorrect linked list because of context switch](Diagrams/Screen_Shot_2017-06-06_at_11.21.21_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-06_at_11.21.21_PM.png" alt="Incorrect linked list because of context switch" width="600px">
+---
 
 * To avoid this, the kernel:
 
@@ -497,8 +517,10 @@ Because a processor can execute only one process at a time, at most one process 
   * Kernel picks one (say B), which locks the buffer and proceeds.
   * Others (A, C) sleep again if the buffer remains locked.
 
+---
 **Multiple processes sleeping on a lock**
-![Multiple processes sleeping on a lock](Diagrams/Screen_Shot_2017-06-07_at_5.36.08_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-07_at_5.36.08_PM.png" alt="Multiple processes sleeping on a lock" width="600px">
+---
 
 
 ## Kernel Data Structures
@@ -596,8 +618,10 @@ Two parts of the buffer:
 
 Data in a buffer corresponds to data in a logical disk block on a file system. A disk block can **never** map into more than one buffer at a time.
 
+---
 **Buffer header**
-![Buffer header](Diagrams/Screen_Shot_2017-06-07_at_10.27.45_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-07_at_10.27.45_PM.png" alt="Buffer header" width="600px">
+---
 
 The *device number* fields specifies the logical file system (not physical device) and *block number* block number of the data on disk. These two numbers *uniquely* identify the buffer. The *status* field summarizes the current status of the buffer. The *ptr to data area* is a pointer to the data area, whose size must be at least as big as the size of a disk block.
 
@@ -615,13 +639,17 @@ The two set of pointers in the header are used for traversal of the buffer queue
 
 The kernel follows the *least recently unused (LRU)* algorithm for the buffer pool. The kernel maintains a *free list* of buffers that preserves the least recently used order. Dummy buffer header marks the beginning and end of the list. All the buffers are put on the free list when the system is booted. When the kernel wants *any* buffer, it takes it from the head of the free list. But it can also take a specific buffer from the list. The used buffers, when become free, are attached to the end of the list, hence the buffers closer and closer to the head of the list are the least recently used ones.
 
+---
 **Free list of buffers**
-![Free list of buffers](Diagrams/Screen_Shot_2017-06-07_at_10.44.09_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-07_at_10.44.09_PM.png" alt="Free list of buffers" width="600px">
+---
 
 When the kernel accesses a disk block, it searches for the buffer with the appropriate device-block number combination. Rather than search the entire buffer pool, it organizes the buffers into separate queues, *hashed* as a function of the device and block number. The hash queues are also doubly linked circular lists. A hashing function which uniformly distributes the buffers across the lists is used. But it also has to be simple so that the performance does not suffer.
 
+---
 **Buffers on the Hash Queues**
-![Buffers on the Hash Queues](Diagrams/Screen_Shot_2017-06-07_at_10.52.09_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-07_at_10.52.09_PM.png" alt="Buffers on the Hash Queues" width="600px">
+---
 
 The hash function shown in the figure only depends on the block number; real hash functions depend on device number as well.
 
@@ -715,40 +743,54 @@ The states of hash queues for different scenarios are shown in following figures
 
 Scenario 1
 
+---
 **Scenario 1**
-![Scenario 1](Diagrams/Screen_Shot_2017-06-07_at_11.28.20_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-07_at_11.28.20_PM.png" alt="Scenario 1" width="600px">
+---
 
 Scenario 2
 
 Here the buffer is not on the hash queue, so a buffer from free list is removed and then its device and block numbers are changed.
 
+---
 **Scenario 2**
-![Scenario 2](Diagrams/Screen_Shot_2017-06-07_at_11.30.35_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-07_at_11.30.35_PM.png" alt="Scenario 2" width="600px">
+---
 
 Scenario 3
 
+---
 **Scenario 3**
-![Scenario 3](Diagrams/Screen_Shot_2017-06-07_at_11.30.14_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-07_at_11.30.14_PM.png" alt="Scenario 3" width="600px">
+---
 
 Scenario 4
 
+---
 **Scenario 4**
-![Scenario 4](Diagrams/Screen_Shot_2017-06-07_at_11.31.17_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-07_at_11.31.17_PM.png" alt="Scenario 4" width="600px">
+---
 
 Race for free buffer
 
+---
 **Race for free buffer**
-![Race for free buffer](Diagrams/Screen_Shot_2017-06-07_at_11.48.55_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-07_at_11.48.55_PM.png" alt="Race for free buffer" width="600px">
+---
 
 Scenario 5
 
+---
 **Scenario 5**
-![Scenario 5](Diagrams/Screen_Shot_2017-06-07_at_11.50.00_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-07_at_11.50.00_PM.png" alt="Scenario 5" width="600px">
+---
 
 Race for a locked buffer **(this is an important race condition)**
 
+---
 **Race for a locked buffer**
-![Race for a locked buffer](Diagrams/Screen_Shot_2017-06-07_at_11.53.00_PM.png)
+<img src="Diagrams/Screen_Shot_2017-06-07_at_11.53.00_PM.png" alt="Race for a locked buffer" width="600px">
+---
 
 **The kernel guarantees that all processes waiting for buffers will wake up, because it allocates buffers during execution of system calls and frees them before returning.**
 
