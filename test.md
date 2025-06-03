@@ -1,5 +1,7 @@
 # Unit 01
 
+
+---
 ## Why UNIX became so popular
 
 * Portable: written in a high-level language (C), making it easy to read, understand, change, and move to other machines.
@@ -12,12 +14,11 @@
 * Hardware Abstraction: Portability across systems.
 
 
-## High-level Architecture of UNIX Systems
 
 ---
-**Architecture of UNIX Systems**
-<img src="Diagrams/Screen_Shot_2017-06-05_at_4.39.07_PM.png" alt="Architecture of UNIX Systems" width="600px">
----
+## High-level Architecture of UNIX Systems
+
+![Architecture of UNIX Systems](Diagrams/Screen_Shot_2017-06-05_at_4.39.07_PM.png)
 
 * Layer-1: Hardware: It consists of all hardware related information.
 * Layer-2: Kernel: This is the core of the Operating System. It is a software that acts as the interface between the hardware and the software. Most of the tasks like memory management, file management, network management, process management, etc., are done by the kernel.
@@ -27,12 +28,18 @@
 * The operating systems interacts directly with the hardware, providing common services to programs and insulating them from hardware idiosyncrasies.
 Programs such as the shell and editors shown in the outer layers interact with the kernel by invoking a well defined set of *system calls*.
 
+
+---
 ## User Perspective
 
+
+---
 ### Shell
 
 * The OS provides a command-line interface or shell to interact with files, processes, and system services
   
+
+---
 ### The File System
 
 * Hierarchical Structure: Tree-like organisation with a root ('/').
@@ -46,11 +53,15 @@ Programs such as the shell and editors shown in the outer layers interact with t
   - Directories: Organise files (non-leaf nodes).
   - Files: Data storage (leaf nodes: directories, regular files, special device files).
  
+
+---
 ### Process
 
 * Users can run commands, scripts, and applications, and manage system resources indirectly via system calls or shell commands.
   
 
+
+---
 ## Operating System Services
 
 * Process Control: Allows creation, termination, suspension, and communication between processes.
@@ -63,6 +74,8 @@ Programs such as the shell and editors shown in the outer layers interact with t
 * Shell Support: Provides services like input reading, process spawning, piping, and I/O redirection to enable shell functionality.
 * Customizability: Supports user-built environments (e.g., custom shells) using the same kernel services.
 
+
+---
 ## Assumptions about Hardware
 
 * **Execution Modes**
@@ -86,10 +99,7 @@ Programs such as the shell and editors shown in the outer layers interact with t
   * OS sees which *process* is running.
   * Hardware sees which *mode* is active.
 
----
-**Operating system view and hardware view**
-<img src="Diagrams/Screen_Shot_2017-06-05_at_5.46.41_PM.png" alt="Operating system view and hardware view" width="600px">
----
+  ![Operating system view and hardware view](Diagrams/Screen_Shot_2017-06-05_at_5.46.41_PM.png)
 
 * **Interrupts**
 
@@ -112,10 +122,7 @@ Programs such as the shell and editors shown in the outer layers interact with t
   * Kernel masks lower-priority interrupts during critical operations.
   * Execution level set using privileged instructions.
 
----
-**Typical interrupt levels**
-<img src="Diagrams/Screen_Shot_2017-06-05_at_6.04.33_PM.png" alt="Typical interrupt levels" width="600px">
----
+  ![Typical interrupt levels](Diagrams/Screen_Shot_2017-06-05_at_6.04.33_PM.png)
 
 * **Memory Management**
 
@@ -125,18 +132,19 @@ Programs such as the shell and editors shown in the outer layers interact with t
   * Supports techniques like paging.
 
 
+
+---
 # Introduction to the Kernel
 
+
+---
 ## Architecture of the UNIX Operating System
 
 The UNIX system supports the illusions that the file system has "places" and that processes have "life".
 
 The two entities, files and processes, are the two central concepts in the UNIX system model.
 
----
-**Block Diagram of the System Kernel**
-<img src="Diagrams/Screen_Shot_2017-06-05_at_9.00.14_PM.png" alt="Block Diagram of the System Kernel" width="600px">
----
+![Block Diagram of the System Kernel](Diagrams/Screen_Shot_2017-06-05_at_9.00.14_PM.png)
 
 * The *file subsystem* is on the left and the *process control subsystem* is on the right.
 * The diagram shows 3 levels : user, kernel, and hardware.
@@ -203,8 +211,12 @@ The two entities, files and processes, are the two central concepts in the UNIX 
   * Interrupts are serviced by **kernel functions**, not separate processes.
   * After servicing, the interrupted process resumes.
 
+
+---
 ## Introduction to System Concepts
 
+
+---
 ### An Overview of the File Subsystem
 
 * **Inode (Index Node)**
@@ -226,11 +238,10 @@ The two entities, files and processes, are the two central concepts in the UNIX 
   * File descriptor returned → index into the user file descriptor table.
   * `read()` / `write()` follow file descriptor to inode via table pointers.
 
----
-**File descriptors, file table, and inode table**
-<img src="Diagrams/Screen_Shot_2017-06-05_at_9.25.33_PM.png" alt="File descriptors, file table, and inode table" width="600px">
----
+![File descriptors, file table, and inode table](Diagrams/Screen_Shot_2017-06-05_at_9.25.33_PM.png)
 
+
+---
 ### **Logical vs Physical Devices**
 
 * **Logical Devices**
@@ -245,6 +256,8 @@ The two entities, files and processes, are the two central concepts in the UNIX 
 
 ---
 
+
+---
 ### **File System Layout**
 
 * **Logical Block**
@@ -255,10 +268,7 @@ The two entities, files and processes, are the two central concepts in the UNIX 
 
 ---
 
----
-**File system layout**
-<img src="Diagrams/Screen_Shot_2017-06-05_at_9.34.48_PM.png" alt="File system layout" width="600px">
----
+![File system layout](Diagrams/Screen_Shot_2017-06-05_at_9.34.48_PM.png)
 
 ---
 
@@ -284,6 +294,8 @@ The two entities, files and processes, are the two central concepts in the UNIX 
   * Store actual file content and admin data.
   * Each block belongs to only one file.
 
+
+---
 ## Processes
 
 * **Definition**
@@ -335,10 +347,7 @@ int version = 1;    // initialized data
   * **Kernel Stack**: used after system call (kernel mode).
   * Switch triggered via a **trap instruction** on system call.
 
----
-**User and Kernel stack**
-<img src="Diagrams/Screen_Shot_2017-06-05_at_10.08.31_PM.png" alt="User and Kernel stack" width="600px">
----
+![User and Kernel stack](Diagrams/Screen_Shot_2017-06-05_at_10.08.31_PM.png)
 
 ---
 
@@ -367,10 +376,7 @@ int version = 1;    // initialized data
   * Current directory and root
   * Size limits (file/process)
 
----
-**Data structures for processes**
-<img src="Diagrams/Screen_Shot_2017-06-05_at_10.07.13_PM.png" alt="Data structures for processes" width="600px">
----
+![Data structures for processes](Diagrams/Screen_Shot_2017-06-05_at_10.07.13_PM.png)
 
 ---
 
@@ -387,6 +393,8 @@ int version = 1;    // initialized data
 
 ---
 
+
+---
 ## Context of a process
 
 * **Context includes:**
@@ -419,6 +427,8 @@ int version = 1;    // initialized data
 ---
 
 
+
+---
 ## Process states
 
 1. Process is currently executing in user mode.
@@ -428,6 +438,8 @@ int version = 1;    // initialized data
 
 Because a processor can execute only one process at a time, at most one process may be in states 1 and 2.
 
+
+---
 ## State transitions
 
 * Processes move continuously between states according to well-defined rules.
@@ -437,10 +449,7 @@ Because a processor can execute only one process at a time, at most one process 
   * **Nodes:** process states
   * **Edges:** events triggering transitions
 
----
-**Process States and Transitions**
-<img src="Diagrams/Screen_Shot_2017-06-06_at_11.12.56_PM.png" alt="Process States and Transitions" width="600px">
----
+![Process States and Transitions](Diagrams/Screen_Shot_2017-06-06_at_11.12.56_PM.png)
 
 * The kernel **allows context switches only** when a process moves from **kernel running** → **asleep in memory**.
 
@@ -460,10 +469,7 @@ Because a processor can execute only one process at a time, at most one process 
 
 * If a context switch happens at the marked line, the linked list becomes inconsistent, risking corruption if modified by another process.
 
----
-**Incorrect linked list because of context switch**
-<img src="Diagrams/Screen_Shot_2017-06-06_at_11.21.21_PM.png" alt="Incorrect linked list because of context switch" width="600px">
----
+![Incorrect linked list because of context switch](Diagrams/Screen_Shot_2017-06-06_at_11.21.21_PM.png)
 
 * To avoid this, the kernel:
 
@@ -474,6 +480,8 @@ Because a processor can execute only one process at a time, at most one process 
 
 ---
 
+
+---
 ## Sleep and wakeup
 
 * A process decides **on its own initiative** when to sleep or wake up.
@@ -517,12 +525,11 @@ Because a processor can execute only one process at a time, at most one process 
   * Kernel picks one (say B), which locks the buffer and proceeds.
   * Others (A, C) sleep again if the buffer remains locked.
 
----
-**Multiple processes sleeping on a lock**
-<img src="Diagrams/Screen_Shot_2017-06-07_at_5.36.08_PM.png" alt="Multiple processes sleeping on a lock" width="600px">
----
+![Multiple processes sleeping on a lock](Diagrams/Screen_Shot_2017-06-07_at_5.36.08_PM.png)
 
 
+
+---
 ## Kernel Data Structures
 
 * Kernel data structures mostly use **fixed-size tables** instead of dynamic allocation.
@@ -535,6 +542,8 @@ Because a processor can execute only one process at a time, at most one process 
 
 ---
 
+
+---
 ## System Administration
 
 * Administrative processes perform tasks for the overall welfare of users, e.g.,
@@ -554,6 +563,8 @@ Because a processor can execute only one process at a time, at most one process 
 ---
 
 
+
+---
 # The Buffer Cache
 
 **Purpose:**
@@ -561,6 +572,8 @@ The buffer cache is an internal memory pool that the kernel uses to cache recent
 
 ---
 
+
+---
 ### How Buffer Cache Works:
 
 * When a process requests file data, the kernel first checks the buffer cache.
@@ -570,6 +583,8 @@ The buffer cache is an internal memory pool that the kernel uses to cache recent
 
 ---
 
+
+---
 ### Placement in Kernel Architecture:
 
 * Buffer cache sits between the **file subsystem** (which manages files and directories) and **block device drivers** (which handle the actual disks).
@@ -577,6 +592,8 @@ The buffer cache is an internal memory pool that the kernel uses to cache recent
 
 ---
 
+
+---
 ### Key Data Structures Cached:
 
 * **File data blocks**: Actual content of files.
@@ -585,6 +602,8 @@ The buffer cache is an internal memory pool that the kernel uses to cache recent
 
 ---
 
+
+---
 ### Advantages of Buffer Cache:
 
 * **Reduces disk I/O:** By keeping frequently accessed blocks in memory.
@@ -593,6 +612,8 @@ The buffer cache is an internal memory pool that the kernel uses to cache recent
 
 ---
 
+
+---
 ### Disadvantages of Buffer Cache:
 
 * **Memory overhead:** Consumes part of main memory.
@@ -601,65 +622,111 @@ The buffer cache is an internal memory pool that the kernel uses to cache recent
 
 ---
 
+
+---
 ### Summary:
 
 The buffer cache optimizes file system performance by caching disk blocks in main memory. It balances between fast memory access and the slow disk, using algorithms to decide what to keep or write back to disk, improving both read and write efficiency.
 
 ---
 
+
+---
 ## Buffer Headers
 
-During system initialization, the kernel allocates space for a number of buffers, configurable according to memory size and performance constraints.
+During system initialization, the kernel allocates **buffers**, which are used to temporarily hold disk data in memory. Each buffer consists of:
 
-Two parts of the buffer:
-
-1. a memory array that contains data from the disk.
-2. *buffer header* that identifies the buffer.
-
-Data in a buffer corresponds to data in a logical disk block on a file system. A disk block can **never** map into more than one buffer at a time.
+* **Memory array**: Stores the actual data copied from a disk block.
+* **Buffer header**: Metadata that identifies and manages the buffer.
 
 ---
-**Buffer header**
-<img src="Diagrams/Screen_Shot_2017-06-07_at_10.27.45_PM.png" alt="Buffer header" width="600px">
+
+
+---
+### Key Concepts
+
+* **Data association**: Each buffer corresponds to a specific logical disk block in a filesystem.
+* **Uniqueness**: A disk block can only be mapped to one buffer at a time.
+* **Identification**: Buffers are uniquely identified by two numbers:
+
+  * **Device number**: Logical filesystem identifier (not physical device).
+  * **Block number**: Position of the data block on the disk.
+
+Together, these uniquely specify the buffer.
+
 ---
 
-The *device number* fields specifies the logical file system (not physical device) and *block number* block number of the data on disk. These two numbers *uniquely* identify the buffer. The *status* field summarizes the current status of the buffer. The *ptr to data area* is a pointer to the data area, whose size must be at least as big as the size of a disk block.
 
-The status of a buffer is a combination of the following conditions:
+---
+### Buffer Header Components
 
-* Buffer is locked / busy
-* Buffer contains valid data
-* Kernel must write the buffer contents to disk before reassigning the buffer; called as "delayed-write"
-* Kernel is currently reading or writing the contexts of the buffer to disk
-* A process is currently waiting for the buffer to become free.
+![Buffer header](Diagrams/Screen_Shot_2017-06-07_at_10.27.45_PM.png)
 
-The two set of pointers in the header are used for traversal of the buffer queues (doubly linked circular lists).
+* **Status Field**: Indicates the current state of the buffer, which can include:
 
+  * **Locked/Busy**: The buffer is currently in use.
+  * **Valid Data**: The buffer contains up-to-date data.
+  * **Delayed-write**: Data must be written to disk before buffer reuse.
+  * **I/O in Progress**: Kernel is currently reading or writing the buffer.
+  * **Wait Flag**: One or more processes are waiting for the buffer to become free.
+
+* **Data Pointer**: Points to the memory area holding the disk block data. Size must match or exceed the disk block size.
+
+* **Queue Pointers**: Two sets of pointers forming doubly linked circular lists for traversing buffer queues efficiently.
+
+---
+
+
+---
 ## Structure of the Buffer Pool
 
-The kernel follows the *least recently unused (LRU)* algorithm for the buffer pool. The kernel maintains a *free list* of buffers that preserves the least recently used order. Dummy buffer header marks the beginning and end of the list. All the buffers are put on the free list when the system is booted. When the kernel wants *any* buffer, it takes it from the head of the free list. But it can also take a specific buffer from the list. The used buffers, when become free, are attached to the end of the list, hence the buffers closer and closer to the head of the list are the least recently used ones.
+* The kernel uses the **Least Recently Used (LRU)** algorithm for managing the buffer pool.
+* It maintains a **free list** of buffers preserving the LRU order.
+* A **dummy buffer header** marks the start and end of the free list.
+* At system boot, **all buffers** are placed on the free list.
+* When the kernel needs **any free buffer**, it takes one from the **head** of the free list.
+* It can also take a **specific buffer** from anywhere in the free list.
+* When used buffers become free, they are attached to the **tail** of the free list.
+* Buffers closer to the **head** of the free list are the **least recently used**.
+
+![Free list of buffers](Diagrams/Screen_Shot_2017-06-07_at_10.44.09_PM.png)
+*Free list of buffers*
 
 ---
-**Free list of buffers**
-<img src="Diagrams/Screen_Shot_2017-06-07_at_10.44.09_PM.png" alt="Free list of buffers" width="600px">
+
+* When accessing a disk block, the kernel searches for a buffer with the matching **device-block number** combination.
+* To avoid searching the entire buffer pool, buffers are organized into **hash queues**.
+* Hash queues are also **doubly linked circular lists**.
+* A **hash function** distributes buffers uniformly across these queues.
+* The hash function must be **simple** to maintain performance.
+
+![Buffers on the Hash Queues](Diagrams/Screen_Shot_2017-06-07_at_10.52.09_PM.png)
+*Buffers on the Hash Queues*
+
 ---
 
-When the kernel accesses a disk block, it searches for the buffer with the appropriate device-block number combination. Rather than search the entire buffer pool, it organizes the buffers into separate queues, *hashed* as a function of the device and block number. The hash queues are also doubly linked circular lists. A hashing function which uniformly distributes the buffers across the lists is used. But it also has to be simple so that the performance does not suffer.
+* The example hash function depends only on the block number; real systems also use the device number.
+* Each disk block exists on **one and only one hash queue**, and only once on that queue.
+* A buffer's presence on a hash queue does not imply it is busy; it may also be on the free list if free.
+* To find a **specific buffer**, the kernel searches the hash queue.
+* To find **any free buffer**, the kernel removes one from the free list.
+
+**Key point:**
+A buffer is **always on a hash queue**, but it **may or may not be on the free list**.
 
 ---
-**Buffers on the Hash Queues**
-<img src="Diagrams/Screen_Shot_2017-06-07_at_10.52.09_PM.png" alt="Buffers on the Hash Queues" width="600px">
+
+
 ---
-
-The hash function shown in the figure only depends on the block number; real hash functions depend on device number as well.
-
-Every disk block in the buffer pool exists on one and only one hash queue and only once on that queue. However, presence of a buffer on a hash queue does not mean that it is busy, it could well be on the free list as well if its status is free.
-
-Therefore, if the kernel wants a particular buffer, it will search it on the queue. But if it wants *any* buffer, it removes a buffer from the free list. **A buffer is always on a hash queue, but it may or may not be on the free list**
-
 ## Scenarios for Retrieval of a Buffer
 
 The algorithms for reading and writing disk blocks use the algorithm *getblk* to allocate buffers from the pool. There are 5 typical scenarios the kernel may follow in *getblk* to allocate a buffer for a disk block.
+
+* Found & Free: Block in hash queue, buffer free (mark busy, remove from free list).
+* Found, Busy: Block in hash queue, buffer busy, sleep until free.
+* Not Found, Free Buffer: Block not in hash queue, allocate from free list (remove from old hash, add to new hash).
+* Not Found, Delayed Write: Allocate "delayed write" buffer, write to disk, retry.
+* Not Found, No Free: Free list empty, sleep until a buffer is free.
 
 1. Block is found on its hash queue and its buffer is free.
 2. Block could not be found on the hash queue, so a buffer from the free list is allocated.
@@ -743,58 +810,39 @@ The states of hash queues for different scenarios are shown in following figures
 
 Scenario 1
 
----
-**Scenario 1**
-<img src="Diagrams/Screen_Shot_2017-06-07_at_11.28.20_PM.png" alt="Scenario 1" width="600px">
----
+![Scenario 1](Diagrams/Screen_Shot_2017-06-07_at_11.28.20_PM.png)
 
 Scenario 2
 
 Here the buffer is not on the hash queue, so a buffer from free list is removed and then its device and block numbers are changed.
 
----
-**Scenario 2**
-<img src="Diagrams/Screen_Shot_2017-06-07_at_11.30.35_PM.png" alt="Scenario 2" width="600px">
----
+![Scenario 2](Diagrams/Screen_Shot_2017-06-07_at_11.30.35_PM.png)
 
 Scenario 3
 
----
-**Scenario 3**
-<img src="Diagrams/Screen_Shot_2017-06-07_at_11.30.14_PM.png" alt="Scenario 3" width="600px">
----
+![Scenario 3](Diagrams/Screen_Shot_2017-06-07_at_11.30.14_PM.png)
 
 Scenario 4
 
----
-**Scenario 4**
-<img src="Diagrams/Screen_Shot_2017-06-07_at_11.31.17_PM.png" alt="Scenario 4" width="600px">
----
+![Scenario 4](Diagrams/Screen_Shot_2017-06-07_at_11.31.17_PM.png)
 
 Race for free buffer
 
----
-**Race for free buffer**
-<img src="Diagrams/Screen_Shot_2017-06-07_at_11.48.55_PM.png" alt="Race for free buffer" width="600px">
----
+![Race for free buffer](Diagrams/Screen_Shot_2017-06-07_at_11.48.55_PM.png)
 
 Scenario 5
 
----
-**Scenario 5**
-<img src="Diagrams/Screen_Shot_2017-06-07_at_11.50.00_PM.png" alt="Scenario 5" width="600px">
----
+![Scenario 5](Diagrams/Screen_Shot_2017-06-07_at_11.50.00_PM.png)
 
 Race for a locked buffer **(this is an important race condition)**
 
----
-**Race for a locked buffer**
-<img src="Diagrams/Screen_Shot_2017-06-07_at_11.53.00_PM.png" alt="Race for a locked buffer" width="600px">
----
+![Race for a locked buffer](Diagrams/Screen_Shot_2017-06-07_at_11.53.00_PM.png)
 
 **The kernel guarantees that all processes waiting for buffers will wake up, because it allocates buffers during execution of system calls and frees them before returning.**
 
 
+
+---
 ## Reading and Writing Disk Blocks
 
 This is the algorithm (*bread*) for reading data from the disk:
